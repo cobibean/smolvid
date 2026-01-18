@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>smolvids — Simple Video Compression</title>
+  <meta name="description" content="Compress videos locally in your browser. No uploads, no servers, 100% private.">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📹</text></svg>">
+  <script type="importmap">
+    {
+      "imports": {
+        "@ffmpeg/ffmpeg": "./vendor/ffmpeg/classes.js",
+        "@ffmpeg/util": "./vendor/ffmpeg-util/index.js"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>smolvids</h1>
+      <p class="privacy-note">Runs locally. No uploads. Your video never leaves your device.</p>
+    </header>
+
+    <!-- File Selection Panel -->
+    <section id="file-section" class="panel">
+      <button id="select-btn" class="btn btn-primary">Select Video</button>
+      <input type="file" id="file-input" accept="video/*" hidden>
+      <div id="file-info" class="file-info hidden">
+        <p><strong>File:</strong> <span id="file-name"></span></p>
+        <p><strong>Size:</strong> <span id="file-size"></span></p>
+        <p id="duration-row"><strong>Duration:</strong> <span id="file-duration"></span></p>
+      </div>
+    </section>
+
+    <!-- Controls Panel -->
+    <section id="controls-section" class="panel hidden">
+      <div class="control-group">
+        <label for="size-select">Max file size</label>
+        <select id="size-select">
+          <option value="25">25 MB</option>
+          <option value="40">40 MB</option>
+          <option value="50">50 MB</option>
+          <option value="100">100 MB</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Compression preset</label>
+        <div class="preset-buttons">
+          <button class="preset-btn" data-preset="fast">Fast</button>
+          <button class="preset-btn active" data-preset="balanced">Balanced</button>
+          <button class="preset-btn" data-preset="smallest">Smallest</button>
+        </div>
+      </div>
+      <button id="compress-btn" class="btn btn-primary">Compress</button>
+    </section>
+
+    <!-- Progress Panel -->
+    <section id="progress-section" class="panel hidden">
+      <p id="progress-text">Compressing...</p>
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+    </section>
+
+    <!-- Result Panel -->
+    <section id="result-section" class="panel hidden">
+      <p id="result-message"></p>
+      <p><strong>Output size:</strong> <span id="output-size"></span></p>
+      <a id="download-link" class="btn btn-primary" download>Download</a>
+      <button id="reset-btn" class="btn btn-secondary">Compress Another</button>
+    </section>
+
+    <!-- Error Panel -->
+    <section id="error-section" class="panel hidden">
+      <p id="error-message" class="error-text"></p>
+      <button id="error-reset-btn" class="btn btn-secondary">Try Again</button>
+    </section>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

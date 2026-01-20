@@ -55,9 +55,6 @@ function init() {
 
   // Event listeners
   dom.selectBtn.addEventListener('click', (e) => {
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:selectBtn:click',message:'Select button clicked',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H5',runId:'post-fix'})}).catch(()=>{});
-    // #endregion
     e.stopPropagation(); // Prevent bubbling to drop zone
     dom.fileInput.click();
   });
@@ -120,12 +117,7 @@ function setupDragAndDrop() {
   });
 
   dom.dropZone.addEventListener('drop', handleDrop);
-  dom.dropZone.addEventListener('click', (e) => {
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:dropZone:click',message:'Drop zone clicked',data:{targetId:e.target?.id,targetTagName:e.target?.tagName},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H5'})}).catch(()=>{});
-    // #endregion
-    dom.fileInput.click();
-  });
+  dom.dropZone.addEventListener('click', () => dom.fileInput.click());
 }
 
 function handleDrop(e) {
@@ -139,15 +131,9 @@ function handleDrop(e) {
 }
 
 function handleFileSelect(event) {
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:handleFileSelect:entry',message:'handleFileSelect called',data:{filesLength:event?.target?.files?.length,fileType:event?.target?.files?.[0]?.type,fileName:event?.target?.files?.[0]?.name},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H3'})}).catch(()=>{});
-  // #endregion
   const file = event.target.files[0];
   if (!file) return;
 
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:handleFileSelect:beforeTypeCheck',message:'About to check file.type.startsWith',data:{fileExists:!!file,fileType:file?.type,fileTypeTypeof:typeof file?.type},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1'})}).catch(()=>{});
-  // #endregion
   // Validate it's a video
   if (!file.type.startsWith('video/')) {
     showError('Please select a video file.');
@@ -216,9 +202,6 @@ function handlePresetChange(preset) {
 }
 
 async function handleCompress() {
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:handleCompress:entry',message:'Compress button clicked',data:{isCompressing:state.isCompressing,fileExists:!!state.file,fileName:state.file?.name,fileType:state.file?.type,duration:state.duration},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4'})}).catch(()=>{});
-  // #endregion
   if (state.isCompressing || !state.file) return;
 
   state.isCompressing = true;
@@ -229,24 +212,12 @@ async function handleCompress() {
 
   try {
     // Load ffmpeg
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:handleCompress:beforeFFmpegLoad',message:'About to load ffmpeg',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
-    // #endregion
     const ffmpeg = await loadFFmpeg();
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:handleCompress:afterFFmpegLoad',message:'FFmpeg loaded successfully',data:{ffmpegLoaded:!!ffmpeg,ffmpegLoadedProp:ffmpeg?.loaded},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H6'})}).catch(()=>{});
-    // #endregion
     updateProgress('Preparing video...', 10);
 
     // Write input file to ffmpeg virtual filesystem
     const inputFileName = state.file.name;
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:handleCompress:beforeWriteFile',message:'About to write input file',data:{inputFileName,fileSize:state.file?.size},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H7'})}).catch(()=>{});
-    // #endregion
     await writeInputFile(ffmpeg, state.file);
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:handleCompress:afterWriteFile',message:'Input file written successfully',data:{inputFileName},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H7'})}).catch(()=>{});
-    // #endregion
     const outputFileName = getOutputFileName(state.file.name);
 
     // Calculate duration (use extracted or estimate from file size)
@@ -274,9 +245,6 @@ async function handleCompress() {
     showResult(outputBlob, outputFileName, warning);
 
   } catch (error) {
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/49bf7071-3c19-420f-8483-86ceb2bf6a83',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'app.js:handleCompress:catch',message:'Compression error caught',data:{errorType:typeof error,errorString:String(error),errorName:error?.name,errorMessage:error?.message,errorStack:error?.stack?.substring(0,500),isError:error instanceof Error},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H8'})}).catch(()=>{});
-    // #endregion
     console.error('Compression failed:', error);
     showError('This file couldn\'t be processed in your browser. Try a different video or a smaller file.');
   } finally {

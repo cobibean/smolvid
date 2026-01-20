@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>smolvids — Simple Video Compression</title>
   <meta name="description" content="Compress videos locally in your browser. No uploads, no servers, 100% private.">
-  <meta name="theme-color" content="#2563eb">
+  <meta name="theme-color" content="#ff6b35">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📹</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
   <script type="importmap">
     {
       "imports": {
@@ -21,18 +27,44 @@
   <main class="container">
     <!-- Header -->
     <header class="header">
-      <h1>smolvids</h1>
-      <p class="privacy-note">Runs locally. No uploads. Your video never leaves your device.</p>
+      <div class="header-content">
+        <h1 class="logo">smolvids</h1>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+          <span class="toggle-track">
+            <span class="toggle-indicator"></span>
+          </span>
+        </button>
+      </div>
     </header>
 
     <!-- File Selection Panel -->
     <section id="file-section" class="panel">
-      <button id="select-btn" class="btn btn-primary">Select Video</button>
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-zone-content">
+          <svg class="drop-zone-icon" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 8L8 24V40L32 56L56 40V24L32 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 56V40M8 24L32 40L56 24M32 40L32 24M32 24L20 17M32 24L44 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <button id="select-btn" class="btn btn-primary">Select Video</button>
+          <p class="drop-zone-hint">or drag and drop here</p>
+        </div>
+      </div>
       <input type="file" id="file-input" accept="video/*" hidden>
       <div id="file-info" class="file-info hidden">
-        <p><strong>File:</strong> <span id="file-name"></span></p>
-        <p><strong>Size:</strong> <span id="file-size"></span></p>
-        <p id="duration-row"><strong>Duration:</strong> <span id="file-duration"></span></p>
+        <div class="file-info-grid">
+          <div class="file-info-item">
+            <span class="file-info-label">File</span>
+            <span id="file-name" class="file-info-value"></span>
+          </div>
+          <div class="file-info-item">
+            <span class="file-info-label">Size</span>
+            <span id="file-size" class="file-info-value"></span>
+          </div>
+          <div id="duration-row" class="file-info-item">
+            <span class="file-info-label">Duration</span>
+            <span id="file-duration" class="file-info-value"></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -79,6 +111,11 @@
       <p id="error-message" class="error-text"></p>
       <button id="error-reset-btn" class="btn btn-secondary">Try Again</button>
     </section>
+
+    <!-- Footer Tagline -->
+    <footer class="footer">
+      <p class="tagline">Privacy-first video compression. Your files never leave your browser.</p>
+    </footer>
   </main>
   <script type="module" src="app.js"></script>
 </body>

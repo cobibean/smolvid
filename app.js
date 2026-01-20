@@ -41,6 +41,11 @@ function init() {
   dom.errorSection = document.getElementById('error-section');
   dom.errorMessage = document.getElementById('error-message');
   dom.errorResetBtn = document.getElementById('error-reset-btn');
+  dom.themeToggle = document.getElementById('theme-toggle');
+  dom.dropZone = document.getElementById('drop-zone');
+
+  // Initialize theme from localStorage or default to dark
+  initializeTheme();
 
   // Check browser compatibility
   if (!checkBrowserSupport()) {
@@ -58,10 +63,68 @@ function init() {
   dom.compressBtn.addEventListener('click', handleCompress);
   dom.resetBtn.addEventListener('click', resetApp);
   dom.errorResetBtn.addEventListener('click', resetApp);
+  dom.themeToggle.addEventListener('click', toggleTheme);
+
+  // Drag and drop support
+  setupDragAndDrop();
 
   window.addEventListener('beforeunload', cleanup);
 
   console.log('smolvids initialized');
+}
+
+// Theme Management
+function initializeTheme() {
+  const savedTheme = localStorage.getItem('smolvids-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('smolvids-theme', newTheme);
+}
+
+// Drag and Drop Support
+function setupDragAndDrop() {
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dom.dropZone.addEventListener(eventName, preventDefaults, false);
+  });
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dom.dropZone.addEventListener(eventName, () => {
+      dom.dropZone.classList.add('drag-over');
+    });
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dom.dropZone.addEventListener(eventName, () => {
+      dom.dropZone.classList.remove('drag-over');
+    });
+  });
+
+  dom.dropZone.addEventListener('drop', handleDrop);
+  dom.dropZone.addEventListener('click', () => dom.fileInput.click());
+}
+
+function handleDrop(e) {
+  const dt = e.dataTransfer;
+  const files = dt.files;
+
+  if (files.length > 0) {
+    dom.fileInput.files = files;
+    handleFileSelect({ target: { files: files } });
+  }
 }
 
 function handleFileSelect(event) {

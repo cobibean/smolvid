@@ -249,7 +249,7 @@ async function handleCompress() {
   } catch (error) {
     console.error('Compression failed:', error);
     // Check if it was a user-initiated stop
-    if (String(error).includes('terminated') || String(error).includes('Terminated')) {
+    if (String(error).includes('terminate')) {
       // Don't show error for user-initiated stop
       return;
     }

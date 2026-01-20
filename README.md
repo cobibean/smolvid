@@ -15,7 +15,7 @@ A simple, privacy-first video compression tool that runs 100% in your browser.
 ## How It Works
 
 1. Select a video from your device
-2. Choose a target file size (50MB or 100MB)
+2. Choose a target file size (25MB, 40MB, 50MB, or 100MB)
 3. Pick a compression preset (Fast, Balanced, or Smallest)
 4. Click Compress and wait
 5. Download your compressed video
@@ -66,7 +66,7 @@ These headers are required for ffmpeg.wasm to work (it uses SharedArrayBuffer).
 
 ## Technical Details
 
-- Uses [ffmpeg.wasm](https://ffmpegwasm.netlify.app/) for video processing
+- Uses [ffmpeg.wasm](https://ffmpegwasm.netlify.app/) with multi-threaded encoding for faster compression
 - H.264 encoding with automatic bitrate calculation
 - Multi-pass compression with automatic downscaling
 - Audio stream copied unchanged (no re-encoding)

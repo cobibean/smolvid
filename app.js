@@ -1,6 +1,6 @@
 // app.js - Full implementation for Phase 2
 
-import { loadFFmpeg, writeInputFile, readOutputFile, deleteFile } from './lib/ffmpeg-loader.js';
+import { loadFFmpeg, writeInputFile, readOutputFile, deleteFile, terminateFFmpeg } from './lib/ffmpeg-loader.js';
 import {
   compressToTargetSize,
   getOutputFileName
@@ -43,6 +43,7 @@ function init() {
   dom.errorResetBtn = document.getElementById('error-reset-btn');
   dom.themeToggle = document.getElementById('theme-toggle');
   dom.dropZone = document.getElementById('drop-zone');
+  dom.stopBtn = document.getElementById('stop-btn');
 
   // Initialize theme from localStorage or default to dark
   initializeTheme();
@@ -67,6 +68,7 @@ function init() {
   dom.resetBtn.addEventListener('click', resetApp);
   dom.errorResetBtn.addEventListener('click', resetApp);
   dom.themeToggle.addEventListener('click', toggleTheme);
+  dom.stopBtn.addEventListener('click', handleStopCompression);
 
   // Drag and drop support
   setupDragAndDrop();
@@ -246,11 +248,34 @@ async function handleCompress() {
 
   } catch (error) {
     console.error('Compression failed:', error);
+    // Check if it was a user-initiated stop
+    if (String(error).includes('terminated') || String(error).includes('Terminated')) {
+      // Don't show error for user-initiated stop
+      return;
+    }
     showError('This file couldn\'t be processed in your browser. Try a different video or a smaller file.');
   } finally {
     state.isCompressing = false;
     dom.compressBtn.disabled = false;
   }
+}
+
+function handleStopCompression() {
+  if (!state.isCompressing) return;
+  
+  // Terminate ffmpeg worker
+  terminateFFmpeg();
+  
+  // Reset state
+  state.isCompressing = false;
+  dom.compressBtn.disabled = false;
+  
+  // Hide progress, show controls again
+  dom.progressSection.classList.add('hidden');
+  dom.controlsSection.classList.remove('hidden');
+  dom.progressFill.style.width = '0%';
+  
+  console.log('Compression stopped by user');
 }
 
 // Rough duration estimate if metadata extraction failed

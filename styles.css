@@ -507,6 +507,13 @@ select:focus {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
+#progress-section #stop-btn {
+  margin-top: 1.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   body {

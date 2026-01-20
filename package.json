@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Simple, privacy-first video compression in the browser",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "dev": "npx serve . -l 3000",
     "build": "rm -rf dist && mkdir -p dist/lib dist/vendor/ffmpeg dist/vendor/ffmpeg-util && cp index.html styles.css app.js _headers vercel.json serve.json dist/ && cp lib/*.js dist/lib/ && cp vendor/ffmpeg/* dist/vendor/ffmpeg/ && cp vendor/ffmpeg-util/* dist/vendor/ffmpeg-util/",

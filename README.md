@@ -78,6 +78,15 @@ These headers are required for ffmpeg.wasm to work (it uses SharedArrayBuffer).
 - Some audio codecs may not be compatible with MP4 container
 - Processing time depends on video length and device performance
 
+## Credits
+
+This project is made possible by:
+
+- **[ffmpeg.wasm](https://github.com/ffmpegwasm/ffmpeg.wasm)** - WebAssembly port of FFmpeg (MIT license wrapper, LGPL v2.1+ core)
+- **FFmpeg** - The underlying multimedia framework (LGPL v2.1+)
+
 ## License
 
-MIT
+MIT - See [LICENSE](LICENSE) file for details
+
+Note: ffmpeg.wasm core binaries are licensed under LGPL v2.1+ following FFmpeg's license.
